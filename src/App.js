@@ -3,6 +3,8 @@ import { isEqual } from 'lodash';
 import { v4 } from 'uuid';
 import './App.css';
 
+export const serverUrl = process.env.SERVER_URL || 'http://localhost:3001';
+
 function App() {
 	const [messages, setMessages] = useState([]);
 	const [storedMessages, setStoredMessages] = useState([]);
@@ -12,7 +14,7 @@ function App() {
 	const getStoredMessages = async () => {
 		setIsLoading(true);
 		try {
-			const response = await fetch('http://localhost:3001/message');
+			const response = await fetch(`${serverUrl}/message`);
 			const { list } = await response.json();
 
 			if (!list || list?.length === 0) {
@@ -40,7 +42,7 @@ function App() {
 		setIsLoading(true);
 		console.log(messages)
 		try {
-			const response = await fetch('http://localhost:3001/message', {
+			const response = await fetch(`${serverUrl}/message`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

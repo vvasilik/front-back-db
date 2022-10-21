@@ -1,5 +1,3 @@
-
-
 const FIELD_NAME = "listField";
 const DEFAULT_CONFIG = {
     "collection": "listCollection",
