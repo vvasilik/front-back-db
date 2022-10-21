@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { isEqual } from 'lodash';
 import { v4 } from 'uuid';
 import './App.css';
@@ -12,6 +12,7 @@ function App() {
 	const [storedMessages, setStoredMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const inputRef = useRef(null);
 
 	const getStoredMessages = async () => {
 		setIsLoading(true);
@@ -40,9 +41,12 @@ function App() {
 		setNewMessage("");
 	};
 
+	const removeMessage = (idToBeRemoved) => {
+		setMessages(messages.filter(({ id }) => id !== idToBeRemoved));
+	};
+
 	const storeMessages = async () => {
 		setIsLoading(true);
-		console.log(messages)
 		try {
 			const response = await fetch(`${serverUrl}/message`, {
 				method: 'POST',
@@ -62,7 +66,7 @@ function App() {
 	}
 
 	const keyDownHandler = (event) => {
-		if (event.key === 'Enter') {
+		if (event.key === 'Enter' && newMessage !== '') {
 			addMessage();
 		}
 	};
@@ -79,18 +83,25 @@ function App() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [messages]);
 
+	useEffect(() => {
+		if (!isLoading && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [isLoading]);
+
 	return (
 		<div className="App">
 			<div className='input-area'>
 				<span className='input-area-title'>Message:</span>
 				<input
+					ref={inputRef}
 					onChange={(event) => setNewMessage(event.target.value)}
 					onKeyDown={keyDownHandler}
 					type="text"
 					disabled={isLoading}
 					value={newMessage}
 				/>
-				<button onClick={addMessage}>Save</button>
+				<button disabled={newMessage === '' || isLoading} onClick={addMessage}>Save</button>
 			</div>
 				<ul className='list'>
 					{messages.map(({id, timestamp, message}, index) =>
@@ -99,8 +110,13 @@ function App() {
 								className='list-index'>
 									{index + 1}.
 							</span>
-							<span>{message}</span>
-							<small>({new Date(timestamp).toLocaleString()})</small>
+							<span className='list-item-message'>{message}</span>
+							<span className='list-item-date'>{new Date(timestamp).toLocaleString()}</span>
+							<button
+								disabled={isLoading}
+								className='list-item-remove'
+								onClick={() => removeMessage(id)}
+							>✗</button>
 						</li>
 					)}
 					{messages.length === 0 && <li className='list-row'>No messages</li>}

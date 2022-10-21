@@ -21,22 +21,24 @@ app.get('/message', async (req, res) => {
     }
 });
 
-app.post('/message', (req, res) => {
+app.post('/message', async (req, res) => {
     const list = req.body.list;
     const configPOST = getConfigPOST(list);
                 
-    axios(configDelete)
+    await axios(configDelete)
         .then(function () {
             axios(configPOST)
+                .then(() => {
+                    res.send(JSON.stringify({ list }));
+                })
                 .catch(function (error) {
                     console.log(`Error while sending data to DB: ${error.message}`);
+                    res.send(JSON.stringify({ list: [] }));
                 });
         })
         .catch(function (error) {
             console.log(`Error while delete data from DB: ${error.message}`);
         });
-    
-    res.send(JSON.stringify({ list }));
 });
 
 app.listen(3001);

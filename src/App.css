@@ -14,15 +14,29 @@
 .list {
   display: table;
   width: 100%;
+  box-sizing: border-box;
   background-color: #282c34;
   color: white;
   list-style-type: none;
   margin: 0;
-  padding: 50px;
+  padding: 20px;
 }
 
 .list-row {
   display: table-row;
+}
+
+.list-item-date {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.list-item-message {
+  width: 100%;
+}
+
+.list-item-remove {
+  cursor: pointer;
 }
 
 .list-row > * {
