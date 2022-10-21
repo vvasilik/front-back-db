@@ -103,13 +103,11 @@ function App() {
 				/>
 				<button disabled={newMessage === '' || isLoading} onClick={addMessage}>Save</button>
 			</div>
+			<div className='messages-area'>
 				<ul className='list'>
-					{messages.map(({id, timestamp, message}, index) =>
+					{messages.sort((a, b) => a.id < b.id).map(({id, timestamp, message}, index) =>
 						<li className='list-row' key={id}>
-							<span
-								className='list-index'>
-									{index + 1}.
-							</span>
+							<span className='list-index'>{index + 1}.</span>
 							<span className='list-item-message'>{message}</span>
 							<span className='list-item-date'>{new Date(timestamp).toLocaleString()}</span>
 							<button
@@ -119,8 +117,14 @@ function App() {
 							>✗</button>
 						</li>
 					)}
-					{messages.length === 0 && <li className='list-row'>No messages</li>}
+					{messages.length === 0 && !isLoading && <li className='list-row'>No messages</li>}
+					{messages.length === 0 && isLoading && <li className='list-row'>Loading...</li>}
+					{messages.length > 0 && isLoading && <li className='list-row'>
+						<span className='list-index'/>
+						<span className='list-item-message'>Saving...</span>
+					</li>}
 				</ul>
+			</div>
 		</div>
 	);
 }
