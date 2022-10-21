@@ -3,9 +3,7 @@ import { isEqual } from 'lodash';
 import { v4 } from 'uuid';
 import './App.css';
 
-export const serverUrl = process.env.NODE_ENV === 'development'
-	? 'http://localhost:3001'
-	: `${window.location.protocol}//${window.location.hostname}:3001`;
+export const serverUrl = `${window.location.protocol}//${window.location.hostname}:3001`;
 
 function App() {
 	const [messages, setMessages] = useState([]);
