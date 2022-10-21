@@ -1,55 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const axios = require('axios');
-const bodyParser = require('body-parser');
-
-const FIELD_NAME = "messageField";
-const DEFAULT_CONFIG = {
-    "collection": "numberCollection",
-    "database": "numberDB",
-    "dataSource": "Cluster0",
-}
-
-const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Request-Headers': '*',
-    'api-key': '5FRvEylo6N9H5lHuxTeUW3yIfkUd1dOqv1166uBZj8Wm5TGRr4fQNRHERsgjKeQX',
-}
-
-const urlDB = "https://data.mongodb-api.com/app/data-wbtfr/endpoint/data/v1";
-
-const configDelete = {
-    method: 'post',
-    url: `${urlDB}/action/deleteOne`,
-    headers,
-    data: JSON.stringify({
-        ...DEFAULT_CONFIG,
-        "filter": { "name": FIELD_NAME }
-    }),
-};
-
-const getConfigPOST = (message) => ({
-    method: 'post',
-    url: `${urlDB}/action/insertOne`,
-    headers,
-    data: JSON.stringify({
-        ...DEFAULT_CONFIG,
-        "document": {
-            "name": FIELD_NAME,
-            "message": message
-        }
-    }),
-});
-
-const getConfigGET = () => ({
-    method: 'post',
-    url: `${urlDB}/action/findOne`,
-    headers,
-    data: JSON.stringify({
-        ...DEFAULT_CONFIG,
-        "filter": { "name": FIELD_NAME }
-    }),
-});
+import express from 'express';
+import cors from 'cors';
+import axios from 'axios';
+import bodyParser from'body-parser';
+import { getConfigGET, configDelete, getConfigPOST } from './serverVariables.js';
 
 const app = express();
 
@@ -62,19 +15,19 @@ app.get('/message', async (req, res) => {
             .catch(function (error) {
                 console.log(`Error while sending data to DB: ${error.message}`);
             });
-        res.send(JSON.stringify({ message: data?.document?.message }));
+        res.send(JSON.stringify({ list: data?.document?.list }));
     } catch (error) {
         console.log(`Error while getting data from DB: ${error.message}`);
     }
 });
 
 app.post('/message', (req, res) => {
-    const message = req.body.message;
-    console.log(`Set message to ${message}`);
+    const list = req.body.list;
+    const configPOST = getConfigPOST(list);
                 
     axios(configDelete)
         .then(function () {
-            axios(getConfigPOST(req.body.message))
+            axios(configPOST)
                 .catch(function (error) {
                     console.log(`Error while sending data to DB: ${error.message}`);
                 });
@@ -83,7 +36,7 @@ app.post('/message', (req, res) => {
             console.log(`Error while delete data from DB: ${error.message}`);
         });
     
-    res.send(JSON.stringify({ message }));
+    res.send(JSON.stringify({ list }));
 });
 
 app.listen(3001);
