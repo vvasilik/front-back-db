@@ -90,6 +90,7 @@ function App() {
 			<div className='input-area'>
 				<span className='input-area-title'>Message:</span>
 				<input
+					className='input-area-input'
 					ref={inputRef}
 					onChange={(event) => setNewMessage(event.target.value)}
 					onKeyDown={keyDownHandler}
@@ -97,7 +98,12 @@ function App() {
 					disabled={isLoading}
 					value={newMessage}
 				/>
-				<button disabled={newMessage === '' || isLoading} onClick={addMessage}>Save</button>
+				<button
+					className='input-area-button'
+					disabled={newMessage === '' || isLoading}
+					onClick={addMessage}>
+						Save
+					</button>
 			</div>
 			<div className='messages-area'>
 				<ul className='list'>
