@@ -2,12 +2,23 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import bodyParser from'body-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { getConfigGET, configDelete, getConfigPOST } from './serverVariables.js';
 
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.get('/message', async (req, res) => {
     try {
@@ -41,4 +52,4 @@ app.post('/message', async (req, res) => {
         });
 });
 
-app.listen(process.env.PORT || 3001);
+app.listen(process.env.PORT || 3000);

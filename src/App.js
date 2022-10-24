@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 import { v4 } from 'uuid';
 import './App.css';
 
-export const serverUrl = `${window.location.protocol}//${window.location.hostname}:${process.env.PORT || 3001}`;
+export const serverUrl = `${window.location.protocol}//${window.location.hostname}:${process.env.PORT || 3000}`;
 
 function App() {
 	const [messages, setMessages] = useState([]);
