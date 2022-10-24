@@ -1,0 +1,9 @@
+{
+    "name": "front-back-db",
+    "short_name": "front-back-db",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#f7f5f2",
+    "theme_color": "#f7f5f2"
+  }
