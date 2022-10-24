@@ -61,7 +61,7 @@
 }
 
 .list-item-remove:disabled {
-  color: #ccc;
+  color: #444;
 }
 
 .list-item-remove:not(:disabled):hover {

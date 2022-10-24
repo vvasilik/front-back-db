@@ -89,8 +89,6 @@ function App() {
 		}
 	}, [isLoading]);
 
-	console.log(messages)
-
 	return (
 		<div className="App">
 			<div className='input-area'>
