@@ -52,4 +52,4 @@ app.post('/message', async (req, res) => {
         });
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.NODE_ENV === 'development' ? 3001 : (process.env.PORT || 3000));
